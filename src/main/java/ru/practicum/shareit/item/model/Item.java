@@ -8,14 +8,14 @@ import ru.practicum.shareit.user.model.User;
 @Data
 public class Item {
     @NotNull
-    long id;
+    private long id;
     @NotBlank
-    String name;
+    private String name;
     @NotBlank
-    String description;
+    private String description;
     @NotNull
-    boolean available;
+    private boolean available;
     User owner;
     @NotNull
-    String request;
+    private String request;
 }

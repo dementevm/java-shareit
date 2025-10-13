@@ -51,7 +51,6 @@ public class ItemService {
 
     public List<ItemResponseDto> searchItems(String searchText) {
         String searchLower = searchText.toLowerCase();
-        System.out.println(itemRepository.findAllItems());
         return itemRepository.findAllItems().stream()
                 .filter(Item::isAvailable)
                 .filter(item -> {

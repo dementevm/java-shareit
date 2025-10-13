@@ -7,9 +7,9 @@ import lombok.Data;
 @Data
 public class User {
     @NotNull
-    long id;
+    private long id;
     @NotNull
-    String name;
+    private String name;
     @Email
-    String email;
+    private String email;
 }

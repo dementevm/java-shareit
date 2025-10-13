@@ -47,7 +47,6 @@ public class InMemoryItemRepository implements ItemRepository {
 
     @Override
     public Item update(Item item) {
-        System.out.println(items);
         items.put(item.getId(), item);
         return item;
     }
