@@ -75,18 +75,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserForbiddenException.class)
     public ResponseEntity<Map<String, String>> handleUserForbiddenException(UserForbiddenException ex) {
         Map<String, String> error = Map.of("error", ex.getMessage());
+        log.warn("Доступ пользователю запрещен - {}", ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(ItemBookingException.class)
     public ResponseEntity<Map<String, String>> handleItemBookingException(ItemBookingException ex) {
         Map<String, String> error = Map.of("error", ex.getMessage());
+        log.warn("Произошла ошибка при бронировании вещи - {}", ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<Map<String, String>> handleBadRequestException(BadRequestException ex) {
         Map<String, String> error = Map.of("error", ex.getMessage());
+        log.warn("Некорректный запрос - {}", ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

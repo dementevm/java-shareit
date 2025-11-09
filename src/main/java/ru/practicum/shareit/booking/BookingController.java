@@ -40,7 +40,7 @@ public class BookingController {
     @GetMapping
     public List<BookingResponseDto> getCurrentUserBookings(
             @RequestHeader("X-Sharer-User-Id") long userId,
-            @RequestParam(name = "state", required = false, defaultValue = "ALL") String state) {
+            @RequestParam(name = "state", defaultValue = "ALL") String state) {
         return bookingService.getCurrentUserBookings(userId, state);
     }
 }
