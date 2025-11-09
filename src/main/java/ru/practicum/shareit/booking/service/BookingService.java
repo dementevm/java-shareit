@@ -63,7 +63,7 @@ public class BookingService {
 
     public BookingResponseDto getBooking(long userId, long bookingId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new ObjectNotFoundException("Booking %d not found".formatted(bookingId)));
-        if (userId == bookingId || userId == booking.getBooker().getId()) {
+        if (userId == booking.getItem().getOwner().getId() || userId == booking.getBooker().getId()) {
             return bookingMapper.toBookingDto(booking);
         }
         throw new UserForbiddenException("User doesn't has access to Booking %d".formatted(bookingId));
