@@ -19,7 +19,6 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -136,8 +135,7 @@ public class ItemService {
     @Transactional
     public CommentResponseDto addComment(long userId, long itemId, CommentCreateDto dto) {
         boolean allowed = bookingRepository.existsByBooker_IdAndItem_IdAndBookingStatusAndEndLessThanEqual(
-                userId, itemId, Booking.BookingStatus.APPROVED,
-                Instant.now().plus(Duration.ofHours(3)));
+                userId, itemId, Booking.BookingStatus.APPROVED, Instant.now());
         if (!allowed) {
             throw new BadRequestException("User has no completed bookings for this item");
         }
