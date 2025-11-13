@@ -2,6 +2,8 @@ package ru.practicum.shareit.user.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.exeption.ObjectNotFoundException;
 import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserResponseDto;
 import ru.practicum.shareit.user.dto.UserUpdateDto;
@@ -18,37 +20,44 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+    @Transactional(readOnly = true)
     public UserResponseDto findById(Long id) {
-        return userMapper.toUserDto(userRepository.findById(id));
+        return userMapper.toUserDto(userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User with id %d not found".formatted(id))));
     }
 
+    @Transactional(readOnly = true)
     public List<UserResponseDto> findAll() {
         return userRepository.findAll().stream()
                 .map(userMapper::toUserDto)
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public UserResponseDto save(UserCreateDto dto) {
         User user = userMapper.toEntity(dto);
         User saved = userRepository.save(user);
         return userMapper.toUserDto(saved);
     }
 
+    @Transactional
     public UserResponseDto update(Long id, UserUpdateDto dto) {
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User with id %d not found".formatted(id)));
         userMapper.update(user, dto);
-        User saved = userRepository.update(user);
+        User saved = userRepository.save(user);
         return userMapper.toUserDto(saved);
     }
 
+    @Transactional
     public UserResponseDto patch(Long id, UserUpdateDto dto) {
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User with id %d not found".formatted(id)));
         userMapper.update(user, dto);
-        User saved = userRepository.update(user);
+        User saved = userRepository.save(user);
         return userMapper.toUserDto(saved);
     }
 
+    @Transactional
     public void delete(Long id) {
-        userRepository.delete(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User with id %d not found".formatted(id)));
+        userRepository.delete(user);
     }
 }
