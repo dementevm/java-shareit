@@ -35,13 +35,11 @@ class BookingCreateDtoJsonTest {
 
     @Test
     void deserializeParsesConfiguredDateFormat() throws Exception {
-        String content = """
-                {
-                  "start": "2025-06-01T10:15:30",
-                  "end": "2025-06-02T11:15:30",
-                  "itemId": 5
-                }
-                """;
+        String content = "{"
+                + "\"start\":\"2025-06-01T10:15:30\","
+                + "\"end\":\"2025-06-02T11:15:30\","
+                + "\"itemId\":5"
+                + "}";
 
         BookingCreateDto dto = json.parseObject(content);
 
