@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentCreateDto;
 import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.dto.ItemUpdateDto;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/items")
@@ -52,9 +53,12 @@ public class ItemController {
 
     @GetMapping("/search")
     public ResponseEntity<Object> searchItems(
-            @RequestHeader("X-Sharer-User-Id") @Positive long userId,
-            @RequestParam("text") @NotBlank String text
+            @RequestHeader("X-Sharer-User-Id") long userId,
+            @RequestParam(name = "text") String text
     ) {
+        if (text == null || text.isBlank()) {
+            return ResponseEntity.ok(List.of());
+        }
         return itemClient.searchItems(userId, text);
     }
 

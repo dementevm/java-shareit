@@ -41,13 +41,11 @@ public class GlobalExceptionHandler {
         return Map.of("error", ex.getMessage());
     }
 
-    @ExceptionHandler(RestClientResponseException.class)
-    public ResponseEntity<String> handleRestClientResponse(RestClientResponseException ex) {
-        log.warn("Error from shareit-server: status={}, body={}",
-                ex.getStatusCode(), ex.getResponseBodyAsString(), ex);
-        return ResponseEntity
-                .status(ex.getStatusCode())
-                .body(ex.getResponseBodyAsString());
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleIllegalArgument(IllegalArgumentException ex) {
+        log.warn("Illegal argument in gateway: {}", ex.getMessage(), ex);
+        return Map.of("error", ex.getMessage());
     }
 
     @ExceptionHandler(NotFoundException.class)
@@ -57,11 +55,12 @@ public class GlobalExceptionHandler {
         return Map.of("error", ex.getMessage());
     }
 
-    @ExceptionHandler(Throwable.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, String> handleOther(Throwable ex) {
-        String message = ex.getMessage() == null ? ex.toString() : ex.getMessage();
-        log.error("Unexpected gateway error: {}", message, ex);
-        return Map.of("error", message);
+    @ExceptionHandler(RestClientResponseException.class)
+    public ResponseEntity<String> handleRestClientResponse(RestClientResponseException ex) {
+        log.warn("Error from shareit-server: status={}, body={}",
+                ex.getStatusCode(), ex.getResponseBodyAsString(), ex);
+        return ResponseEntity
+                .status(ex.getStatusCode())
+                .body(ex.getResponseBodyAsString());
     }
 }

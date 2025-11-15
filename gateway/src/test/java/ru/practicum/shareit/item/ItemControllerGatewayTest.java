@@ -120,8 +120,10 @@ class ItemControllerGatewayTest {
     void searchItemsWithBlankTextReturnsBadRequest() throws Exception {
         mockMvc.perform(get("/items/search")
                         .header("X-Sharer-User-Id", 1L)
-                        .param("text", ""))
-                .andExpect(status().isBadRequest());
+                        .param("text", " "))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(0));
 
         verifyNoInteractions(itemClient);
     }

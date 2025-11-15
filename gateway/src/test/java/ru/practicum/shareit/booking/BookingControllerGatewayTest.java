@@ -125,7 +125,7 @@ class BookingControllerGatewayTest {
         mockMvc.perform(get("/bookings")
                         .header("X-Sharer-User-Id", 1L)
                         .param("state", "UNKNOWN"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
 
         verifyNoInteractions(bookingClient);
     }
